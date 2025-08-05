@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Соцсети с дымом</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --light-bg: linear-gradient(to right, #f9f9f9, #e0e0e0);
+      --dark-bg: #121212;
+      --light-text: #333;
+      --dark-text: #f0f0f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 50px 20px;
+      text-align: center;
+      transition: background 1s ease, color 0.6s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.light {
+      background: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    body.dark {
+      background: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    canvas#smokeCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInTop 0.8s ease forwards;
+      position: relative;
+      z-index: 2;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 20px;
+      background: none;
+      border: 2px solid currentColor;
+      border-radius: 30px;
+      padding: 10px 15px;
+      transition: background 0.3s, color 0.3s;
+      z-index: 3;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .social-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin: 20px auto;
+      padding: 15px 20px;
+      font-size: 18px;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: materialize 0.6s ease forwards;
+      position: relative;
+      z-index: 2;
+    }
+
+    .social-button:nth-child(3) { animation-delay: 0.3s; }
+    .social-button:nth-child(4) { animation-delay: 0.5s; }
+    .social-button:nth-child(5) { animation-delay: 0.7s; }
+
+    .social-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .instagram {
+      background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
+    }
+
+    .tiktok {
+      background-color: #000000;
+    }
+
+    .telegram {
+      background-color: #0088cc;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .social-button {
+        font-size: 16px;
+        padding: 12px;
+      }
+
+      .social-button i {
+        font-size: 20px;
+      }
+
+      .theme-toggle {
+        font-size: 16px;
+        padding: 8px 12px;
+      }
+    }
+
+    @keyframes materialize {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeInTop {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="light">
+  <canvas id="smokeCanvas"></canvas>
+
+  <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
+
+  <h1>Подпишись на нас в соцсетях</h1>
+
+  <a href="https://www.instagram.com/blooming_lily_mom" class="social-button instagram" target="_blank">
+    <i class="fab fa-instagram"></i> Instagram
+  </a>
+
+  <a href="https://www.tiktok.com/@kisochka001" class="social-button tiktok" target="_blank">
+    <i class="fab fa-tiktok"></i> TikTok
+  </a>
+
+  <a href="https://t.me/lilysoul" class="social-button telegram" target="_blank">
+    <i class="fab fa-telegram-plane"></i> Telegram
+  </a>
+
+  <script>
+    // Темная/светлая тема
+    const toggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      body.className = savedTheme;
+      updateButton(savedTheme);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = body.classList.contains('dark') ? 'dark' : 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      body.className = newTheme;
+      localStorage.setItem('theme', newTheme);
+      updateButton(newTheme);
+    });
+
+    function updateButton(theme) {
+      toggleBtn.textContent = theme === 'dark' ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+    }
+
+    // Дымовой эффект
+    const canvas = document.getElementById("smokeCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const smokeParticles = Array.from({ length: 50 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 80 + 20,
+      alpha: Math.random() * 0.1 + 0.02,
+      dx: Math.random() * 0.2 - 0.1,
+      dy: Math.random() * 0.1 - 0.05
+    }));
+
+    function drawSmoke() {
+      ctx.clearRect(0, 0, width, height);
+      for (const p of smokeParticles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 200, 200, ${p.alpha})`;
+        ctx.fill();
+
+        p.x += p.dx;
+        p.y += p.dy;
+
+        // Зацикливание
+        if (p.x < -p.radius) p.x = width + p.radius;
+        if (p.x > width + p.radius) p.x = -p.radius;
+        if (p.y < -p.radius) p.y = height + p.radius;
+        if (p.y > height + p.radius) p.y = -p.radius;
+      }
+      requestAnimationFrame(drawSmoke);
+    }
+
+    drawSmoke();
+  </script>
+</body>
+</html>

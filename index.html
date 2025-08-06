@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Соцсети с дымом</title>
+  <title>Мои соцсети</title>
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   <style>
     :root {
-      --light-bg: linear-gradient(to right, #f9f9f9, #e0e0e0);
-      --dark-bg: #121212;
+      --light-bg1: #ffe6f0;
+      --light-bg2: #fff0f5;
+      --dark-bg1: #1a1a2e;
+      --dark-bg2: #16213e;
       --light-text: #333;
       --dark-text: #f0f0f0;
     }
@@ -25,27 +27,25 @@
       margin: 0;
       padding: 50px 20px;
       text-align: center;
+      color: var(--light-text);
+      background: linear-gradient(-45deg, var(--light-bg1), var(--light-bg2), #fceff9, #ffe6f0);
+      background-size: 400% 400%;
+      animation: gradientFlow 15s ease infinite;
       transition: background 1s ease, color 0.6s ease;
-      position: relative;
       overflow: hidden;
     }
 
-    body.light {
-      background: var(--light-bg);
-      color: var(--light-text);
-    }
-
     body.dark {
-      background: var(--dark-bg);
       color: var(--dark-text);
+      background: linear-gradient(-45deg, var(--dark-bg1), var(--dark-bg2), #0f3460, #1a1a2e);
+      background-size: 400% 400%;
+      animation: gradientFlow 15s ease infinite;
     }
 
-    canvas#smokeCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      pointer-events: none;
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     h1 {
@@ -161,17 +161,15 @@
 </head>
 
 <body class="light">
-  <canvas id="smokeCanvas"></canvas>
-
   <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
 
-  <h1>Подпишись на нас в соцсетях</h1>
+  <h1>Мои соцсети</h1>
 
   <a href="https://www.instagram.com/blooming_lily_mom" class="social-button instagram" target="_blank">
     <i class="fab fa-instagram"></i> Instagram
   </a>
 
-  <a href="https://www.tiktok.com/@kisochka0018" class="social-button tiktok" target="_blank">
+  <a href="https://www.tiktok.com/@kisochka001" class="social-button tiktok" target="_blank">
     <i class="fab fa-tiktok"></i> TikTok
   </a>
 
@@ -180,7 +178,7 @@
   </a>
 
   <script>
-    // Темная/светлая тема
+    // Переключение темы
     const toggleBtn = document.getElementById('themeToggle');
     const body = document.body;
 
@@ -201,49 +199,6 @@
     function updateButton(theme) {
       toggleBtn.textContent = theme === 'dark' ? '☀️ Светлая тема' : '🌙 Тёмная тема';
     }
-
-    // Дымовой эффект
-    const canvas = document.getElementById("smokeCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    window.addEventListener("resize", () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
-    const smokeParticles = Array.from({ length: 50 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      radius: Math.random() * 80 + 20,
-      alpha: Math.random() * 0.1 + 0.02,
-      dx: Math.random() * 0.2 - 0.1,
-      dy: Math.random() * 0.1 - 0.05
-    }));
-
-    function drawSmoke() {
-      ctx.clearRect(0, 0, width, height);
-      for (const p of smokeParticles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200, 200, 200, ${p.alpha})`;
-        ctx.fill();
-
-        p.x += p.dx;
-        p.y += p.dy;
-
-        // Зацикливание
-        if (p.x < -p.radius) p.x = width + p.radius;
-        if (p.x > width + p.radius) p.x = -p.radius;
-        if (p.y < -p.radius) p.y = height + p.radius;
-        if (p.y > height + p.radius) p.y = -p.radius;
-      }
-      requestAnimationFrame(drawSmoke);
-    }
-
-    drawSmoke();
   </script>
 </body>
 </html>

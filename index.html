@@ -4,57 +4,103 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Мои соцсети</title>
-
-  <!-- Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   <style>
     :root {
-      --light-bg1: #ffe6f0;
-      --light-bg2: #fff0f5;
-      --dark-bg1: #1a1a2e;
-      --dark-bg2: #16213e;
+      --light-bg1: #fff5f0;
+      --light-bg2: #ffece6;
+      --dark-bg1: #0d0d0d;
+      --dark-bg2: #1a1a1a;
       --light-text: #333;
       --dark-text: #f0f0f0;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 50px 20px;
+      font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+      padding: 60px 20px;
       text-align: center;
       color: var(--light-text);
-      background: linear-gradient(-45deg, var(--light-bg1), var(--light-bg2), #fceff9, #ffe6f0);
-      background-size: 400% 400%;
-      animation: gradientFlow 15s ease infinite;
+      background: linear-gradient(-45deg, var(--light-bg1), var(--light-bg2));
       transition: background 1s ease, color 0.6s ease;
       overflow: hidden;
+      position: relative;
     }
 
     body.dark {
       color: var(--dark-text);
-      background: linear-gradient(-45deg, var(--dark-bg1), var(--dark-bg2), #0f3460, #1a1a2e);
-      background-size: 400% 400%;
-      animation: gradientFlow 15s ease infinite;
+      background: linear-gradient(-45deg, var(--dark-bg1), var(--dark-bg2));
     }
 
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .fire-container,
+    .ash-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .fire {
+      position: absolute;
+      bottom: 0;
+      width: 5px;
+      height: 60px;
+      background: radial-gradient(ellipse at center, #ff6600 0%, #ff3300 70%, transparent 100%);
+      opacity: 0.7;
+      animation: flame 0.6s linear infinite;
+    }
+
+    @keyframes flame {
+      0% {
+        transform: translateY(0) scaleY(1);
+        opacity: 0.9;
+      }
+      50% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-150px) scaleY(0.3);
+        opacity: 0;
+      }
+    }
+
+    .ash {
+      position: absolute;
+      top: 0;
+      width: 2px;
+      height: 2px;
+      background: rgba(100, 100, 100, 0.3);
+      border-radius: 50%;
+      animation: fall 8s linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
     }
 
     h1 {
       margin-bottom: 40px;
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: fadeInTop 0.8s ease forwards;
       position: relative;
       z-index: 2;
+      font-weight: 600;
     }
 
     .theme-toggle {
@@ -62,17 +108,12 @@
       top: 20px;
       right: 20px;
       cursor: pointer;
-      font-size: 20px;
-      background: none;
+      font-size: 16px;
+      padding: 10px 15px;
       border: 2px solid currentColor;
       border-radius: 30px;
-      padding: 10px 15px;
-      transition: background 0.3s, color 0.3s;
+      background: none;
       z-index: 3;
-    }
-
-    .theme-toggle:hover {
-      background: rgba(0, 0, 0, 0.05);
     }
 
     .social-button {
@@ -84,84 +125,37 @@
       max-width: 300px;
       margin: 20px auto;
       padding: 15px 20px;
-      font-size: 18px;
+      font-size: 16px;
       color: white;
       text-decoration: none;
       border-radius: 10px;
-      opacity: 0;
-      transform: scale(0.8);
-      animation: materialize 0.6s ease forwards;
       position: relative;
       z-index: 2;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: appear 0.6s ease forwards;
     }
 
-    .social-button:nth-child(3) { animation-delay: 0.3s; }
-    .social-button:nth-child(4) { animation-delay: 0.5s; }
-    .social-button:nth-child(5) { animation-delay: 0.7s; }
+    .social-button:nth-of-type(2) { animation-delay: 0.3s; }
+    .social-button:nth-of-type(3) { animation-delay: 0.5s; }
+    .social-button:nth-of-type(4) { animation-delay: 0.7s; }
 
-    .social-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
+    .instagram { background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); }
+    .tiktok { background-color: #000; }
+    .telegram { background-color: #0088cc; }
 
-    .instagram {
-      background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
-    }
-
-    .tiktok {
-      background-color: #000000;
-    }
-
-    .telegram {
-      background-color: #0088cc;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 24px;
-      }
-
-      .social-button {
-        font-size: 16px;
-        padding: 12px;
-      }
-
-      .social-button i {
-        font-size: 20px;
-      }
-
-      .theme-toggle {
-        font-size: 16px;
-        padding: 8px 12px;
-      }
-    }
-
-    @keyframes materialize {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes fadeInTop {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes appear {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 
 <body class="light">
   <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
+
+  <div class="fire-container" id="fireContainer"></div>
+  <div class="ash-container" id="ashContainer"></div>
 
   <h1>Мои соцсети</h1>
 
@@ -178,27 +172,58 @@
   </a>
 
   <script>
-    // Переключение темы
     const toggleBtn = document.getElementById('themeToggle');
     const body = document.body;
+    const fireContainer = document.getElementById('fireContainer');
+    const ashContainer = document.getElementById('ashContainer');
 
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      body.className = savedTheme;
-      updateButton(savedTheme);
+    function createFire() {
+      for (let i = 0; i < 50; i++) {
+        const fire = document.createElement('div');
+        fire.className = 'fire';
+        fire.style.left = Math.random() * 100 + '%';
+        fire.style.animationDuration = (Math.random() * 0.5 + 0.4) + 's';
+        fireContainer.appendChild(fire);
+      }
+    }
+
+    function createAsh() {
+      for (let i = 0; i < 50; i++) {
+        const ash = document.createElement('div');
+        ash.className = 'ash';
+        ash.style.left = Math.random() * 100 + '%';
+        ash.style.animationDuration = (Math.random() * 5 + 3) + 's';
+        ash.style.animationDelay = (Math.random() * 5) + 's';
+        ashContainer.appendChild(ash);
+      }
+    }
+
+    function updateTheme(theme) {
+      if (theme === 'dark') {
+        toggleBtn.textContent = '☀️ Светлая тема';
+        fireContainer.style.display = 'block';
+        ashContainer.style.display = 'none';
+      } else {
+        toggleBtn.textContent = '🌙 Тёмная тема';
+        fireContainer.style.display = 'none';
+        ashContainer.style.display = 'block';
+      }
     }
 
     toggleBtn.addEventListener('click', () => {
-      const currentTheme = body.classList.contains('dark') ? 'dark' : 'light';
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
       body.className = newTheme;
       localStorage.setItem('theme', newTheme);
-      updateButton(newTheme);
+      updateTheme(newTheme);
     });
 
-    function updateButton(theme) {
-      toggleBtn.textContent = theme === 'dark' ? '☀️ Светлая тема' : '🌙 Тёмная тема';
-    }
+    // Инициализация
+    createFire();
+    createAsh();
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    body.className = savedTheme;
+    updateTheme(savedTheme);
   </script>
 </body>
 </html>
